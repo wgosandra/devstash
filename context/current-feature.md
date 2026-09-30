@@ -16,4 +16,4 @@
 
 ## History
 
-<!-- Keep this updated. earliest to latest -->
+- **2026-09-30** — Initial Next.js and Tailwind CSS v4 setup (commit `4542980`)
