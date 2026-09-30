@@ -507,6 +507,12 @@ sequenceDiagram
 - **Item editor** — full‑screen or drawer, Markdown editor, syntax highlighting
 - **Command palette** (`⌘K`) — quick search and actions *(nice‑to‑have)*
 
+### Prototype
+
+Refer to the prototype below as a base for the dashboard UI.
+
+- @context/devstash-dashboard.html
+
 ### Responsive
 
 - Sidebar becomes a **mobile drawer**
