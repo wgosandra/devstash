@@ -1,19 +1,12 @@
 # Current Feature
 
-<!-- Feature name and short description -->
-
 ## Status
-
-<!-- Not Started | In Progress | Completed -->
 
 ## Goals
 
-<!-- Goals and requirements -->
-
 ## Notes
-
-<!-- Any extra notes -->
 
 ## History
 
 - **2026-09-30** — Initial Next.js and Tailwind CSS v4 setup (commit `4542980`)
+- **2026-10-01** — Dashboard UI Phase 1: shadcn/ui init, dark mode, top bar, sidebar/main placeholders
