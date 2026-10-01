@@ -20,17 +20,18 @@ export type ItemType = {
   color: string;
   isSystem: boolean;
   contentKind: ContentType;
+  itemCount: number;
   pro?: boolean;
 };
 
 export const itemTypes: ItemType[] = [
-  { id: "type_snippet", name: "Snippets", slug: "snippets", icon: "Code", color: "#3b82f6", isSystem: true, contentKind: "TEXT" },
-  { id: "type_prompt", name: "Prompts", slug: "prompts", icon: "Sparkles", color: "#8b5cf6", isSystem: true, contentKind: "TEXT" },
-  { id: "type_note", name: "Notes", slug: "notes", icon: "StickyNote", color: "#fde047", isSystem: true, contentKind: "TEXT" },
-  { id: "type_command", name: "Commands", slug: "commands", icon: "Terminal", color: "#f97316", isSystem: true, contentKind: "TEXT" },
-  { id: "type_link", name: "Links", slug: "links", icon: "Link", color: "#10b981", isSystem: true, contentKind: "URL" },
-  { id: "type_image", name: "Images", slug: "images", icon: "Image", color: "#ec4899", isSystem: true, contentKind: "FILE" },
-  { id: "type_file", name: "Files", slug: "files", icon: "File", color: "#6b7280", isSystem: true, contentKind: "FILE", pro: true },
+  { id: "type_snippet", name: "Snippets", slug: "snippets", icon: "Code", color: "#3b82f6", isSystem: true, contentKind: "TEXT", itemCount: 42 },
+  { id: "type_prompt", name: "Prompts", slug: "prompts", icon: "Sparkles", color: "#8b5cf6", isSystem: true, contentKind: "TEXT", itemCount: 18 },
+  { id: "type_note", name: "Notes", slug: "notes", icon: "StickyNote", color: "#fde047", isSystem: true, contentKind: "TEXT", itemCount: 23 },
+  { id: "type_command", name: "Commands", slug: "commands", icon: "Terminal", color: "#f97316", isSystem: true, contentKind: "TEXT", itemCount: 15 },
+  { id: "type_link", name: "Links", slug: "links", icon: "Link", color: "#10b981", isSystem: true, contentKind: "URL", itemCount: 19 },
+  { id: "type_image", name: "Images", slug: "images", icon: "Image", color: "#ec4899", isSystem: true, contentKind: "FILE", itemCount: 7 },
+  { id: "type_file", name: "Files", slug: "files", icon: "File", color: "#6b7280", isSystem: true, contentKind: "FILE", itemCount: 0, pro: true },
 ];
 
 // ─── Collections ─────────────────────────────────────────
