@@ -1,10 +1,24 @@
 # Current Feature
 
-No active feature.
+Dashboard Items — Replace dummy item data in the main dashboard area with real data from the database.
 
 ## Status
 
-Idle
+In Progress
+
+## Spec
+
+- Create `src/lib/db/items.ts` with data fetching functions
+- Fetch items directly in server component
+- Item card icon/border derived from the item type
+- Display item type tags and anything else currently shown
+- If there are no pinned items, nothing should display there
+- Update collection stats display
+
+## References
+
+- `context/features/dashboard-items-spec.md`
+- `context/devstash-dashboard.html`
 
 ## History
 
