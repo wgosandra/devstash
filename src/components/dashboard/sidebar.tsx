@@ -11,10 +11,38 @@ import {
   X,
   MoreHorizontal,
 } from "lucide-react";
-import { itemTypes, collections, currentUser } from "@/lib/mock-data";
 import { iconMap } from "./icon-map";
 
-export function Sidebar() {
+type SidebarItemType = {
+  id: string;
+  name: string;
+  slug: string;
+  icon: string;
+  color: string;
+  isSystem: boolean;
+  itemCount: number;
+};
+
+type SidebarCollection = {
+  id: string;
+  name: string;
+  isFavorite: boolean;
+  itemCount: number;
+  dominantColor: string;
+};
+
+type SidebarUser = {
+  name: string;
+  email: string;
+};
+
+interface SidebarProps {
+  itemTypes: SidebarItemType[];
+  collections: SidebarCollection[];
+  user: SidebarUser;
+}
+
+export function Sidebar({ itemTypes, collections, user }: SidebarProps) {
   const [collapsed, setCollapsed] = useState(false);
   const [mobileOpen, setMobileOpen] = useState(false);
   const [isMobile, setIsMobile] = useState(false);
@@ -37,7 +65,7 @@ export function Sidebar() {
   const favoriteCollections = collections.filter((c) => c.isFavorite);
   const recentCollections = collections.filter((c) => !c.isFavorite).slice(0, 4);
 
-  const initials = currentUser.name
+  const initials = user.name
     .split(" ")
     .map((n) => n[0])
     .join("")
@@ -146,7 +174,7 @@ export function Sidebar() {
                   label={type.name}
                   count={type.itemCount}
                   showLabels={showLabels}
-                  pro={type.pro}
+                  pro={!type.isSystem}
                   onClick={() => setMobileOpen(false)}
                 />
               );
@@ -184,13 +212,27 @@ export function Sidebar() {
               <NavItem
                 key={col.id}
                 href={`/collections/${col.id}`}
-                icon={<Folder className="size-4 text-muted-foreground/60" />}
+                icon={
+                  <span
+                    className="inline-block size-2.5 shrink-0 rounded-full"
+                    style={{ backgroundColor: col.dominantColor }}
+                  />
+                }
                 label={col.name}
                 count={col.itemCount}
                 showLabels={showLabels}
                 onClick={() => setMobileOpen(false)}
               />
             ))}
+
+            {showLabels && (
+              <NextLink
+                href="/collections"
+                className="mt-1 px-2.5 text-xs text-muted-foreground/60 hover:text-muted-foreground"
+              >
+                View all collections
+              </NextLink>
+            )}
           </div>
         </div>
 
@@ -208,10 +250,10 @@ export function Sidebar() {
               <>
                 <div className="flex min-w-0 flex-1 flex-col">
                   <span className="truncate text-[13px] font-medium">
-                    {currentUser.name}
+                    {user.name}
                   </span>
                   <span className="truncate text-xs text-muted-foreground/60">
-                    {currentUser.email}
+                    {user.email}
                   </span>
                 </div>
                 <MoreHorizontal className="size-4 shrink-0 text-muted-foreground/60" />
@@ -252,7 +294,7 @@ function NavItem({
         showLabels ? "" : "justify-center"
       }`}
     >
-      <span className="flex shrink-0">{icon}</span>
+      <span className="flex shrink-0 items-center justify-center w-4">{icon}</span>
       {showLabels && (
         <>
           <span className="flex-1 truncate text-[13.5px] font-medium">

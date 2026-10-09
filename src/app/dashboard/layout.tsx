@@ -1,15 +1,42 @@
 import { Search, Plus } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Sidebar } from "@/components/dashboard/sidebar";
+import { prisma } from "@/lib/db";
+import { getItemTypesWithCounts } from "@/lib/db/items";
+import { getSidebarCollections } from "@/lib/db/collections";
 
-export default function DashboardLayout({
+// TODO: replace with real auth
+const DEMO_USER_EMAIL = "demo@devstash.io";
+
+export default async function DashboardLayout({
   children,
 }: {
   children: React.ReactNode;
 }) {
+  const user = await prisma.user.findUnique({
+    where: { email: DEMO_USER_EMAIL },
+    select: { id: true, name: true, email: true },
+  });
+
+  const sidebarUser = {
+    name: user?.name ?? "User",
+    email: user?.email ?? "",
+  };
+
+  const [itemTypes, collections] = user
+    ? await Promise.all([
+        getItemTypesWithCounts(user.id),
+        getSidebarCollections(user.id),
+      ])
+    : [[], []];
+
   return (
     <div className="flex h-screen overflow-hidden bg-background">
-      <Sidebar />
+      <Sidebar
+        itemTypes={itemTypes}
+        collections={collections}
+        user={sidebarUser}
+      />
 
       <div className="flex flex-1 flex-col overflow-hidden">
         <header className="flex h-14 shrink-0 items-center gap-3 border-b border-border px-4">

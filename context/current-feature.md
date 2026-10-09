@@ -1,6 +1,6 @@
 # Current Feature
 
-Dashboard Items — Replace dummy item data in the main dashboard area with real data from the database.
+Stats & Sidebar — Show real database data in stats cards and sidebar instead of mock data.
 
 ## Status
 
@@ -8,17 +8,16 @@ In Progress
 
 ## Spec
 
-- Create `src/lib/db/items.ts` with data fetching functions
-- Fetch items directly in server component
-- Item card icon/border derived from the item type
-- Display item type tags and anything else currently shown
-- If there are no pinned items, nothing should display there
-- Update collection stats display
+- Display stats pertaining to database data, keeping the current design/layout
+- Display item types in sidebar with their icons, linking to /items/[typename]
+- Add "View all collections" link under the collections list that goes to /collections
+- Keep the star icons for favorite collections but for recents, each collection should show a colored circle based on the most-used item type in that collection
+- Create `src/lib/db/items.ts` and add the database functions. Use the collections file for reference if needed
 
 ## References
 
-- `context/features/dashboard-items-spec.md`
-- `context/devstash-dashboard.html`
+- `context/features/stats-sidebar-spec.md`
+- `src/lib/db/collections.ts`
 
 ## History
 
@@ -29,3 +28,4 @@ In Progress
 - **2026-10-01** — Prisma 7 + Neon PostgreSQL setup: schema, migrations, Neon adapter, db test script
 - **2026-10-09** — Database seed script: demo user, system item types, collections, tags, and 18 sample items
 - **2026-10-09** — Dashboard collections: replaced mock data with real Prisma queries, type-colored borders, type icons
+- **2026-10-09** — Dashboard items: replaced mock item data with real Prisma queries, type-colored borders/icons

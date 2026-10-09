@@ -8,7 +8,10 @@ import {
   ExternalLink,
 } from "lucide-react";
 import { iconMap } from "@/components/dashboard/icon-map";
-import { getRecentCollections } from "@/lib/db/collections";
+import {
+  getRecentCollections,
+  getTotalCollectionCount,
+} from "@/lib/db/collections";
 import { getPinnedItems, getRecentItems, getItemStats } from "@/lib/db/items";
 import { prisma } from "@/lib/db";
 import type { ContentType } from "@/generated/prisma/client";
@@ -51,13 +54,19 @@ export default async function DashboardPage() {
     );
   }
 
-  const [dbCollections, pinnedItems, recentItems, itemStats] =
-    await Promise.all([
-      getRecentCollections(user.id),
-      getPinnedItems(user.id),
-      getRecentItems(user.id),
-      getItemStats(user.id),
-    ]);
+  const [
+    dbCollections,
+    pinnedItems,
+    recentItems,
+    itemStats,
+    totalCollections,
+  ] = await Promise.all([
+    getRecentCollections(user.id),
+    getPinnedItems(user.id),
+    getRecentItems(user.id),
+    getItemStats(user.id),
+    getTotalCollectionCount(user.id),
+  ]);
 
   const favoriteCollections = dbCollections.filter((c) => c.isFavorite).length;
 
@@ -70,7 +79,7 @@ export default async function DashboardPage() {
     },
     {
       label: "Collections",
-      value: dbCollections.length,
+      value: totalCollections,
       icon: FolderOpen,
       color: "#8b5cf6",
     },
@@ -96,7 +105,7 @@ export default async function DashboardPage() {
           Dashboard
         </h1>
         <p className="mt-1 text-sm text-muted-foreground">
-          {itemStats.totalItems} items across {dbCollections.length} collections
+          {itemStats.totalItems} items across {totalCollections} collections
         </p>
       </div>
 
