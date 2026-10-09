@@ -7,18 +7,28 @@ import {
   Clock,
   ExternalLink,
 } from "lucide-react";
-import { items, collections, itemTypes } from "@/lib/mock-data";
+import { items, itemTypes } from "@/lib/mock-data";
 import { iconMap } from "@/components/dashboard/icon-map";
+import { getRecentCollections } from "@/lib/db/collections";
+import { prisma } from "@/lib/db";
 
-export default function DashboardPage() {
+// TODO: replace with real auth
+const DEMO_USER_EMAIL = "demo@devstash.io";
+
+export default async function DashboardPage() {
+  const user = await prisma.user.findUnique({
+    where: { email: DEMO_USER_EMAIL },
+  });
+
+  const dbCollections = user ? await getRecentCollections(user.id) : [];
+
   const totalItems = itemTypes.reduce((sum, t) => sum + t.itemCount, 0);
-  const totalCollections = collections.length;
+  const totalCollections = dbCollections.length;
   const favoriteItems = items.filter((i) => i.isFavorite).length;
-  const favoriteCollections = collections.filter((c) => c.isFavorite).length;
+  const favoriteCollections = dbCollections.filter((c) => c.isFavorite).length;
 
   const pinnedItems = items.filter((i) => i.isPinned);
   const recentItems = items.filter((i) => !i.isPinned).slice(0, 10);
-  const recentCollections = collections.slice(0, 6);
 
   const stats = [
     { label: "Total Items", value: totalItems, icon: Layers, color: "#3b82f6" },
@@ -78,55 +88,48 @@ export default function DashboardPage() {
           </a>
         </div>
         <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 xl:grid-cols-3">
-          {recentCollections.map((col) => {
-            const colItems = items.filter((i) => i.collectionId === col.id);
-            const typeIds = [...new Set(colItems.map((i) => i.typeId))];
-            const colTypes = typeIds
-              .map((tid) => itemTypes.find((t) => t.id === tid))
-              .filter(Boolean);
-
-            return (
-              <div
-                key={col.id}
-                className="flex cursor-pointer flex-col gap-3.5 rounded-xl border border-border bg-[#111114] p-4 transition-colors hover:border-[#2e2e34] hover:bg-[#131317]"
-              >
-                <div className="flex items-start gap-2">
-                  <div className="flex min-w-0 flex-1 flex-col gap-1">
-                    <span className="text-[14.5px] font-semibold tracking-tight">
-                      {col.name}
-                    </span>
-                    <span className="text-xs leading-relaxed text-muted-foreground">
-                      {col.description}
-                    </span>
-                  </div>
-                  {col.isFavorite && (
-                    <Star className="size-3.5 shrink-0 fill-yellow-300 text-yellow-300" />
-                  )}
-                </div>
-                <div className="flex items-center gap-1.5">
-                  {colTypes.map((t) => {
-                    const Icon = iconMap[t!.icon];
-                    return Icon ? (
-                      <span
-                        key={t!.id}
-                        className="flex size-6 items-center justify-center rounded-[7px]"
-                        style={{
-                          backgroundColor: t!.color + "1f",
-                          color: t!.color,
-                        }}
-                      >
-                        <Icon className="size-[13px]" />
-                      </span>
-                    ) : null;
-                  })}
-                  <div className="flex-1" />
-                  <span className="font-mono text-xs text-[#5c5c66]">
-                    {col.itemCount} items
+          {dbCollections.map((col) => (
+            <div
+              key={col.id}
+              className="flex cursor-pointer flex-col gap-3.5 rounded-xl border bg-[#111114] p-4 transition-colors hover:border-[#2e2e34] hover:bg-[#131317]"
+              style={{ borderColor: col.dominantColor + "40" }}
+            >
+              <div className="flex items-start gap-2">
+                <div className="flex min-w-0 flex-1 flex-col gap-1">
+                  <span className="text-[14.5px] font-semibold tracking-tight">
+                    {col.name}
+                  </span>
+                  <span className="text-xs leading-relaxed text-muted-foreground">
+                    {col.description}
                   </span>
                 </div>
+                {col.isFavorite && (
+                  <Star className="size-3.5 shrink-0 fill-yellow-300 text-yellow-300" />
+                )}
               </div>
-            );
-          })}
+              <div className="flex items-center gap-1.5">
+                {col.typeIcons.map((t) => {
+                  const Icon = iconMap[t.icon];
+                  return Icon ? (
+                    <span
+                      key={t.id}
+                      className="flex size-6 items-center justify-center rounded-[7px]"
+                      style={{
+                        backgroundColor: t.color + "1f",
+                        color: t.color,
+                      }}
+                    >
+                      <Icon className="size-[13px]" />
+                    </span>
+                  ) : null;
+                })}
+                <div className="flex-1" />
+                <span className="font-mono text-xs text-[#5c5c66]">
+                  {col.itemCount} items
+                </span>
+              </div>
+            </div>
+          ))}
         </div>
       </section>
 
