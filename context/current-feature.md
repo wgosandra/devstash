@@ -1,23 +1,14 @@
 # Current Feature
 
-Stats & Sidebar — Show real database data in stats cards and sidebar instead of mock data.
+None
 
 ## Status
 
-In Progress
+Idle
 
 ## Spec
 
-- Display stats pertaining to database data, keeping the current design/layout
-- Display item types in sidebar with their icons, linking to /items/[typename]
-- Add "View all collections" link under the collections list that goes to /collections
-- Keep the star icons for favorite collections but for recents, each collection should show a colored circle based on the most-used item type in that collection
-- Create `src/lib/db/items.ts` and add the database functions. Use the collections file for reference if needed
-
 ## References
-
-- `context/features/stats-sidebar-spec.md`
-- `src/lib/db/collections.ts`
 
 ## History
 
@@ -29,3 +20,4 @@ In Progress
 - **2026-10-09** — Database seed script: demo user, system item types, collections, tags, and 18 sample items
 - **2026-10-09** — Dashboard collections: replaced mock data with real Prisma queries, type-colored borders, type icons
 - **2026-10-09** — Dashboard items: replaced mock item data with real Prisma queries, type-colored borders/icons
+- **2026-10-09** — Stats & sidebar: replaced mock data with real Prisma queries, item types with counts, colored collection circles, "View all collections" link
