@@ -11,6 +11,7 @@ import {
   X,
   MoreHorizontal,
 } from "lucide-react";
+import { Badge } from "@/components/ui/badge";
 import { iconMap } from "./icon-map";
 
 type SidebarItemType = {
@@ -41,6 +42,8 @@ interface SidebarProps {
   collections: SidebarCollection[];
   user: SidebarUser;
 }
+
+const PRO_SLUGS = new Set(["files", "images"]);
 
 export function Sidebar({ itemTypes, collections, user }: SidebarProps) {
   const [collapsed, setCollapsed] = useState(false);
@@ -174,7 +177,7 @@ export function Sidebar({ itemTypes, collections, user }: SidebarProps) {
                   label={type.name}
                   count={type.itemCount}
                   showLabels={showLabels}
-                  pro={!type.isSystem}
+                  pro={PRO_SLUGS.has(type.slug) || !type.isSystem}
                   onClick={() => setMobileOpen(false)}
                 />
               );
@@ -301,9 +304,12 @@ function NavItem({
             {label}
           </span>
           {pro && (
-            <span className="rounded bg-purple-500/15 px-1.5 py-0.5 font-mono text-[10px] font-semibold tracking-wider text-purple-300">
+            <Badge
+              variant="secondary"
+              className="h-4 rounded-md bg-purple-500/15 px-1.5 font-mono text-[10px] font-semibold tracking-wider text-purple-300 hover:bg-purple-500/15"
+            >
               PRO
-            </span>
+            </Badge>
           )}
           {isFavorite && <Star className="size-3 fill-yellow-300 text-yellow-300" />}
           {count !== undefined && (
