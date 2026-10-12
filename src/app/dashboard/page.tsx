@@ -1,3 +1,4 @@
+import Link from "next/link";
 import {
   Layers,
   FolderOpen,
@@ -145,12 +146,12 @@ export default async function DashboardPage() {
             Collections
           </h2>
           <div className="flex-1" />
-          <a
+          <Link
             href="/collections"
             className="text-xs text-muted-foreground hover:text-foreground"
           >
             View all
-          </a>
+          </Link>
         </div>
         <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 xl:grid-cols-3">
           {dbCollections.map((col) => (
@@ -164,9 +165,11 @@ export default async function DashboardPage() {
                   <span className="text-[14.5px] font-semibold tracking-tight">
                     {col.name}
                   </span>
-                  <span className="text-xs leading-relaxed text-muted-foreground">
-                    {col.description}
-                  </span>
+                  {col.description && (
+                    <span className="text-xs leading-relaxed text-muted-foreground">
+                      {col.description}
+                    </span>
+                  )}
                 </div>
                 {col.isFavorite && (
                   <Star className="size-3.5 shrink-0 fill-yellow-300 text-yellow-300" />

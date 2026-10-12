@@ -70,6 +70,8 @@ export function Sidebar({ itemTypes, collections, user }: SidebarProps) {
 
   const initials = user.name
     .split(" ")
+    .filter(Boolean)
+    .slice(0, 2)
     .map((n) => n[0])
     .join("")
     .toUpperCase();
@@ -79,6 +81,8 @@ export function Sidebar({ itemTypes, collections, user }: SidebarProps) {
       {/* Mobile toggle */}
       {isMobile && (
         <button
+          type="button"
+          aria-label="Open menu"
           onClick={() => setMobileOpen(true)}
           className="fixed top-3.5 left-3 z-30 flex size-9 items-center justify-center rounded-lg text-muted-foreground hover:bg-muted hover:text-foreground md:hidden"
         >
@@ -89,6 +93,8 @@ export function Sidebar({ itemTypes, collections, user }: SidebarProps) {
       {/* Desktop toggle in top bar */}
       {!isMobile && (
         <button
+          type="button"
+          aria-label="Toggle sidebar"
           onClick={() => setCollapsed(!collapsed)}
           className="hidden size-9 items-center justify-center rounded-lg text-muted-foreground hover:bg-muted hover:text-foreground md:flex"
         >
@@ -126,6 +132,8 @@ export function Sidebar({ itemTypes, collections, user }: SidebarProps) {
           )}
           {isMobile && mobileOpen && (
             <button
+              type="button"
+              aria-label="Close menu"
               onClick={() => setMobileOpen(false)}
               className="ml-auto flex size-8 items-center justify-center rounded-lg text-muted-foreground hover:bg-muted hover:text-foreground"
             >

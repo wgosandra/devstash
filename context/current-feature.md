@@ -12,6 +12,8 @@ Idle
 
 ## History
 
+- **2026-10-13** — Code scanner quick wins: aria labels, next/link, conditional render, initials fix, DATABASE_URL validation, delete mock-data
+
 - **2026-10-12** — Add Pro Badge to Sidebar: shadcn Badge on Files and Images types in sidebar
 
 - **2026-09-30** — Initial Next.js and Tailwind CSS v4 setup (commit `4542980`)
