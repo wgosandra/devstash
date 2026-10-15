@@ -1,26 +1,31 @@
 import { Search, Plus } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Sidebar } from "@/components/dashboard/sidebar";
+import { auth } from "@/auth";
 import { prisma } from "@/lib/db";
 import { getItemTypesWithCounts } from "@/lib/db/items";
 import { getSidebarCollections } from "@/lib/db/collections";
-
-// TODO: replace with real auth
-const DEMO_USER_EMAIL = "demo@devstash.io";
+import { redirect } from "next/navigation";
 
 export default async function DashboardLayout({
   children,
 }: {
   children: React.ReactNode;
 }) {
+  const session = await auth();
+  if (!session?.user?.id) redirect("/sign-in");
+
   const user = await prisma.user.findUnique({
-    where: { email: DEMO_USER_EMAIL },
-    select: { id: true, name: true, email: true },
+    where: { id: session.user.id },
+    select: { id: true, name: true, email: true, image: true },
   });
 
+  if (!user) redirect("/sign-in");
+
   const sidebarUser = {
-    name: user?.name ?? "User",
-    email: user?.email ?? "",
+    name: user.name ?? "User",
+    email: user.email,
+    image: user.image,
   };
 
   const [itemTypes, collections] = user
