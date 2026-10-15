@@ -9,9 +9,12 @@ import {
   PanelLeft,
   Menu,
   X,
-  MoreHorizontal,
+  LogOut,
+  User,
 } from "lucide-react";
+import { signOut } from "next-auth/react";
 import { Badge } from "@/components/ui/badge";
+import { UserAvatar } from "@/components/user-avatar";
 import { iconMap } from "./icon-map";
 
 type SidebarItemType = {
@@ -35,6 +38,7 @@ type SidebarCollection = {
 type SidebarUser = {
   name: string;
   email: string;
+  image: string | null;
 };
 
 interface SidebarProps {
@@ -49,17 +53,18 @@ export function Sidebar({ itemTypes, collections, user }: SidebarProps) {
   const [collapsed, setCollapsed] = useState(false);
   const [mobileOpen, setMobileOpen] = useState(false);
   const [isMobile, setIsMobile] = useState(false);
+  const [userMenuOpen, setUserMenuOpen] = useState(false);
 
   useEffect(() => {
-    const check = () => setIsMobile(window.innerWidth < 768);
+    const check = () => {
+      const mobile = window.innerWidth < 768;
+      setIsMobile(mobile);
+      if (!mobile) setMobileOpen(false);
+    };
     check();
     window.addEventListener("resize", check);
     return () => window.removeEventListener("resize", check);
   }, []);
-
-  useEffect(() => {
-    if (!isMobile) setMobileOpen(false);
-  }, [isMobile]);
 
   const expanded = !collapsed && !isMobile;
   const showLabels = expanded || (isMobile && mobileOpen);
@@ -67,14 +72,6 @@ export function Sidebar({ itemTypes, collections, user }: SidebarProps) {
 
   const favoriteCollections = collections.filter((c) => c.isFavorite);
   const recentCollections = collections.filter((c) => !c.isFavorite).slice(0, 4);
-
-  const initials = user.name
-    .split(" ")
-    .filter(Boolean)
-    .slice(0, 2)
-    .map((n) => n[0])
-    .join("")
-    .toUpperCase();
 
   return (
     <>
@@ -248,29 +245,55 @@ export function Sidebar({ itemTypes, collections, user }: SidebarProps) {
         </div>
 
         {/* User area */}
-        <div className="shrink-0 border-t border-border p-3">
-          <div
-            className={`flex items-center gap-2.5 ${
-              showLabels ? "px-1" : "justify-center"
+        <div className="relative shrink-0 border-t border-border p-3">
+          {userMenuOpen && (
+            <>
+              <div
+                className="fixed inset-0 z-50"
+                onClick={() => setUserMenuOpen(false)}
+              />
+              <div className="absolute bottom-full left-2 right-2 z-50 mb-1 rounded-lg border border-border bg-popover p-1 shadow-lg">
+                <NextLink
+                  href="/profile"
+                  onClick={() => {
+                    setUserMenuOpen(false);
+                    setMobileOpen(false);
+                  }}
+                  className="flex items-center gap-2 rounded-md px-2 py-1.5 text-sm text-popover-foreground hover:bg-muted"
+                >
+                  <User className="size-4" />
+                  Profile
+                </NextLink>
+                <button
+                  type="button"
+                  onClick={() => signOut({ callbackUrl: "/sign-in" })}
+                  className="flex w-full items-center gap-2 rounded-md px-2 py-1.5 text-sm text-popover-foreground hover:bg-muted"
+                >
+                  <LogOut className="size-4" />
+                  Sign out
+                </button>
+              </div>
+            </>
+          )}
+          <button
+            type="button"
+            onClick={() => setUserMenuOpen(!userMenuOpen)}
+            className={`flex w-full items-center gap-2.5 rounded-lg p-1 hover:bg-muted/50 ${
+              showLabels ? "" : "justify-center"
             }`}
           >
-            <div className="flex size-[30px] shrink-0 items-center justify-center rounded-full bg-muted text-xs font-semibold text-foreground">
-              {initials}
-            </div>
+            <UserAvatar name={user.name} image={user.image} size={30} />
             {showLabels && (
-              <>
-                <div className="flex min-w-0 flex-1 flex-col">
-                  <span className="truncate text-[13px] font-medium">
-                    {user.name}
-                  </span>
-                  <span className="truncate text-xs text-muted-foreground/60">
-                    {user.email}
-                  </span>
-                </div>
-                <MoreHorizontal className="size-4 shrink-0 text-muted-foreground/60" />
-              </>
+              <div className="flex min-w-0 flex-1 flex-col text-left">
+                <span className="truncate text-[13px] font-medium">
+                  {user.name}
+                </span>
+                <span className="truncate text-xs text-muted-foreground/60">
+                  {user.email}
+                </span>
+              </div>
             )}
-          </div>
+          </button>
         </div>
       </aside>
     </>

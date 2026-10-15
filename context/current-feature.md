@@ -10,6 +10,8 @@ Not Started
 
 ## History
 
+- **2026-10-16** — Auth UI: custom sign-in page, register page, sidebar avatar with sign-out dropdown, replaced demo user with real auth session
+
 - **2026-10-15** — Auth Setup: NextAuth v5 with GitHub OAuth + Credentials (email/password), split config pattern, proxy route protection, registration API, Zod validation, bcrypt hashing
 
 

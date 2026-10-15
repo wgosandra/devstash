@@ -14,11 +14,9 @@ import {
   getTotalCollectionCount,
 } from "@/lib/db/collections";
 import { getPinnedItems, getRecentItems, getItemStats } from "@/lib/db/items";
-import { prisma } from "@/lib/db";
+import { auth } from "@/auth";
+import { redirect } from "next/navigation";
 import type { ContentType } from "@/generated/prisma/client";
-
-// TODO: replace with real auth
-const DEMO_USER_EMAIL = "demo@devstash.io";
 
 type DashboardItem = {
   id: string;
@@ -43,17 +41,10 @@ type DashboardItem = {
 };
 
 export default async function DashboardPage() {
-  const user = await prisma.user.findUnique({
-    where: { email: DEMO_USER_EMAIL },
-  });
+  const session = await auth();
+  if (!session?.user?.id) redirect("/sign-in");
 
-  if (!user) {
-    return (
-      <div className="flex flex-col items-center justify-center gap-2 p-8 text-muted-foreground">
-        <p>No demo user found. Run the seed script first.</p>
-      </div>
-    );
-  }
+  const user = { id: session.user.id };
 
   const [
     dbCollections,
