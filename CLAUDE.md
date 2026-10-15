@@ -26,6 +26,14 @@ Read the following to get the full context of the project:
 - **Tailwind CSS v4** via `@tailwindcss/postcss` — styles imported with `@import "tailwindcss"` in `globals.css`, no `tailwind.config` file
 - **ESLint 9** flat config with `core-web-vitals` and `typescript` presets
 
+## Neon Database (MCP)
+
+- **Project:** `autumn-sea-33059346` (devstash)
+- **Development branch:** `br-flat-union-b4hq7u1z` (name: `development`)
+- **Production branch:** `br-bold-smoke-b4ld7b14` (name: `production`)
+
+**Always use the development branch** (`br-flat-union-b4hq7u1z`) for all Neon MCP operations by default. Never read from or write to the production branch unless I explicitly say "production". Pass `branch_id` on every `run_sql` call.
+
 ## Project Structure
 
 - `src/app/` — App Router pages and layouts

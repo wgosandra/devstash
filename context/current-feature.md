@@ -1,16 +1,17 @@
 # Current Feature
 
-None
-
 ## Status
 
-Idle
+Not Started
 
-## Spec
+## Goals
 
-## References
+## Notes
 
 ## History
+
+- **2026-10-15** — Auth Setup: NextAuth v5 with GitHub OAuth + Credentials (email/password), split config pattern, proxy route protection, registration API, Zod validation, bcrypt hashing
+
 
 - **2026-10-13** — Code scanner quick wins: aria labels, next/link, conditional render, initials fix, DATABASE_URL validation, delete mock-data
 
