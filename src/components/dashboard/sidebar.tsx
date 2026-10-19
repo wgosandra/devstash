@@ -254,7 +254,7 @@ export function Sidebar({ itemTypes, collections, user }: SidebarProps) {
               />
               <div className="absolute bottom-full left-2 right-2 z-50 mb-1 rounded-lg border border-border bg-popover p-1 shadow-lg">
                 <NextLink
-                  href="/profile"
+                  href="/dashboard/profile"
                   onClick={() => {
                     setUserMenuOpen(false);
                     setMobileOpen(false);
