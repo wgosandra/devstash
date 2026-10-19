@@ -3,6 +3,10 @@ import bcrypt from "bcryptjs";
 import { z } from "zod";
 import { prisma } from "@/lib/db";
 import { registerSchema } from "@/lib/zod";
+import { generateVerificationToken } from "@/lib/tokens";
+import { sendVerificationEmail } from "@/lib/mail";
+
+const skipVerification = process.env.SKIP_EMAIL_VERIFICATION === "true";
 
 export async function POST(request: Request) {
   try {
@@ -22,13 +26,23 @@ export async function POST(request: Request) {
 
     const hashedPassword = await bcrypt.hash(password, 10);
 
-    const user = await prisma.user.create({
-      data: { name, email, password: hashedPassword },
+    await prisma.user.create({
+      data: {
+        name,
+        email,
+        password: hashedPassword,
+        ...(skipVerification && { emailVerified: new Date() }),
+      },
     });
+
+    if (!skipVerification) {
+      const verificationToken = await generateVerificationToken(email);
+      await sendVerificationEmail(email, verificationToken.token);
+    }
 
     return NextResponse.json({
       success: true,
-      data: { id: user.id, name: user.name, email: user.email },
+      data: { email, requiresVerification: !skipVerification },
     });
   } catch (error) {
     if (error instanceof z.ZodError) {
