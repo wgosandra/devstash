@@ -22,14 +22,17 @@ function SignInForm() {
   const callbackUrl = searchParams.get("callbackUrl") ?? "/dashboard";
   const verified = searchParams.get("verified");
   const registered = searchParams.get("registered");
+  const reset = searchParams.get("reset");
 
   useEffect(() => {
     if (verified === "true") {
       toast.success("Email verified! You can now sign in.");
     } else if (registered === "true") {
       toast.success("Account created! You can now sign in.");
+    } else if (reset === "true") {
+      toast.success("Password reset! You can now sign in.");
     }
-  }, [verified, registered]);
+  }, [verified, registered, reset]);
 
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -127,9 +130,17 @@ function SignInForm() {
           </div>
 
           <div className="space-y-2">
-            <label htmlFor="password" className="text-sm font-medium">
-              Password
-            </label>
+            <div className="flex items-center justify-between">
+              <label htmlFor="password" className="text-sm font-medium">
+                Password
+              </label>
+              <NextLink
+                href="/forgot-password"
+                className="text-xs text-muted-foreground hover:text-foreground"
+              >
+                Forgot password?
+              </NextLink>
+            </div>
             <Input
               id="password"
               type="password"

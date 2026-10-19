@@ -14,6 +14,8 @@ Not Started
 
 ## History
 
+- **2026-10-20** — Forgot Password: forgot password link on sign-in, forgot password page with email form, password reset email via Resend, reset password page with token validation, expired/invalid token handling, reuses VerificationToken model with `pwd-reset:` prefix, success toast redirect to sign-in
+
 - **2026-10-19** — Email Verification on Register: verification email via Resend with token link, block unverified sign-in, check-email and verify-email pages, expired token handling with resend, SKIP_EMAIL_VERIFICATION env toggle
 
 
