@@ -32,3 +32,31 @@ export async function sendVerificationEmail(email: string, token: string) {
     throw new Error(`Failed to send verification email: ${error.message}`);
   }
 }
+
+export async function sendPasswordResetEmail(email: string, token: string) {
+  const resetUrl = `${process.env.NEXT_PUBLIC_APP_URL}/reset-password?token=${token}`;
+
+  const { error } = await resend.emails.send({
+    from: FROM_EMAIL,
+    to: [email],
+    subject: `Reset your ${APP_NAME} password`,
+    html: `
+      <div style="font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; max-width: 480px; margin: 0 auto; padding: 40px 20px;">
+        <div style="text-align: center; margin-bottom: 32px;">
+          <div style="display: inline-block; background: #111; color: #fff; font-family: monospace; font-size: 14px; font-weight: 600; width: 40px; height: 40px; line-height: 40px; border-radius: 10px;">ds</div>
+        </div>
+        <h1 style="font-size: 24px; font-weight: 700; text-align: center; margin: 0 0 8px;">Reset your password</h1>
+        <p style="color: #666; text-align: center; margin: 0 0 32px;">Click the button below to reset your ${APP_NAME} password.</p>
+        <div style="text-align: center; margin-bottom: 32px;">
+          <a href="${resetUrl}" style="display: inline-block; background: #111; color: #fff; text-decoration: none; padding: 12px 32px; border-radius: 8px; font-size: 14px; font-weight: 500;">Reset password</a>
+        </div>
+        <p style="color: #999; font-size: 13px; text-align: center;">This link expires in 1 hour. If you didn't request a password reset, you can ignore this email.</p>
+      </div>
+    `,
+  });
+
+  if (error) {
+    console.error("[RESEND ERROR]", error);
+    throw new Error(`Failed to send password reset email: ${error.message}`);
+  }
+}
