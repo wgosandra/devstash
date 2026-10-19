@@ -6,9 +6,16 @@ Not Started
 
 ## Goals
 
+<!-- Add goals here -->
+
 ## Notes
 
+<!-- Add notes here -->
+
 ## History
+
+- **2026-10-19** — Email Verification on Register: verification email via Resend with token link, block unverified sign-in, check-email and verify-email pages, expired token handling with resend, SKIP_EMAIL_VERIFICATION env toggle
+
 
 - **2026-10-16** — Toast notification: show success toast after registration redirects to sign-in page, added Sonner to root layout
 

@@ -34,7 +34,11 @@ export default function RegisterPage() {
       return;
     }
 
-    router.push("/sign-in?registered=true");
+    if (data.data?.requiresVerification) {
+      router.push(`/check-email?email=${encodeURIComponent(email)}`);
+    } else {
+      router.push("/sign-in?registered=true");
+    }
   }
 
   return (
