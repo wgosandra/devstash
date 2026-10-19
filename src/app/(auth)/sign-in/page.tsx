@@ -20,13 +20,16 @@ function SignInForm() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const callbackUrl = searchParams.get("callbackUrl") ?? "/dashboard";
+  const verified = searchParams.get("verified");
   const registered = searchParams.get("registered");
 
   useEffect(() => {
-    if (registered) {
+    if (verified === "true") {
+      toast.success("Email verified! You can now sign in.");
+    } else if (registered === "true") {
       toast.success("Account created! You can now sign in.");
     }
-  }, [registered]);
+  }, [verified, registered]);
 
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -47,6 +50,18 @@ function SignInForm() {
     setLoading(false);
 
     if (result?.error) {
+      const checkRes = await fetch("/api/auth/check-email-verified", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ email }),
+      });
+      const { verified } = await checkRes.json();
+
+      if (!verified) {
+        router.push(`/check-email?email=${encodeURIComponent(email)}`);
+        return;
+      }
+
       setError("Invalid email or password");
       return;
     }
