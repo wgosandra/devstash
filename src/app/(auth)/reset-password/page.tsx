@@ -49,6 +49,10 @@ function ResetPasswordForm({ token }: { token: string }) {
       const result = await resetPassword({ token, password, confirmPassword });
 
       if (!result.success) {
+        if (result.error === "rate_limited") {
+          setError(result.message);
+          return;
+        }
         if (result.error === "expired") {
           setStatus("expired");
         } else {

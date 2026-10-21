@@ -20,7 +20,11 @@ export default function ForgotPasswordPage() {
     setLoading(true);
 
     try {
-      await forgotPassword({ email });
+      const result = await forgotPassword({ email });
+      if (!result.success) {
+        setError(result.error);
+        return;
+      }
       setSent(true);
     } catch {
       setError("Something went wrong. Please try again.");
