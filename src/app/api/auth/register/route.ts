@@ -5,11 +5,25 @@ import { prisma } from "@/lib/db";
 import { registerSchema } from "@/lib/zod";
 import { generateVerificationToken } from "@/lib/tokens";
 import { sendVerificationEmail } from "@/lib/mail";
+import { rateLimiters, checkRateLimit, getIP, rateLimitKey, retryAfterSeconds } from "@/lib/rate-limit";
 
 const skipVerification = process.env.SKIP_EMAIL_VERIFICATION === "true";
 
 export async function POST(request: Request) {
   try {
+    const ip = await getIP();
+    const rl = await checkRateLimit(rateLimiters.register, rateLimitKey(ip));
+
+    if (!rl.success) {
+      const retryAfter = retryAfterSeconds(rl.reset);
+      return NextResponse.json(
+        {
+          success: false,
+          error: `Too many attempts. Please try again in ${Math.ceil(retryAfter / 60)} minutes.`,
+        },
+        { status: 429, headers: { "Retry-After": String(retryAfter) } }
+      );
+    }
     const body = await request.json();
     const { name, email, password } = registerSchema.parse(body);
 

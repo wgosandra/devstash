@@ -19,10 +19,12 @@ function CheckEmailContent() {
   const email = searchParams.get("email");
   const [resending, setResending] = useState(false);
   const [resent, setResent] = useState(false);
+  const [error, setError] = useState("");
 
   async function handleResend() {
     if (!email || resending) return;
     setResending(true);
+    setError("");
 
     const res = await fetch("/api/auth/resend-verification", {
       method: "POST",
@@ -31,7 +33,16 @@ function CheckEmailContent() {
     });
 
     setResending(false);
-    if (res.ok) setResent(true);
+
+    if (res.ok) {
+      setResent(true);
+      return;
+    }
+
+    if (res.status === 429) {
+      const data = await res.json();
+      setError(data.error);
+    }
   }
 
   return (
@@ -54,6 +65,12 @@ function CheckEmailContent() {
         </div>
 
         <div className="space-y-3">
+          {error && (
+            <div className="rounded-lg bg-destructive/10 px-3 py-2 text-sm text-destructive">
+              {error}
+            </div>
+          )}
+
           {resent ? (
             <p className="text-sm text-muted-foreground">
               Verification email resent. Check your inbox.

@@ -7,6 +7,7 @@ import NextLink from "next/link";
 import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import { checkSignInRateLimit } from "@/actions/sign-in";
 
 export default function SignInPage() {
   return (
@@ -43,6 +44,13 @@ function SignInForm() {
     e.preventDefault();
     setError("");
     setLoading(true);
+
+    const rateCheck = await checkSignInRateLimit(email);
+    if (!rateCheck.allowed) {
+      setError(rateCheck.error);
+      setLoading(false);
+      return;
+    }
 
     const result = await signIn("credentials", {
       email,

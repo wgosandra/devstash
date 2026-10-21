@@ -52,10 +52,12 @@ function SuccessState() {
 function ExpiredState({ email }: { email: string | null }) {
   const [resending, setResending] = useState(false);
   const [resent, setResent] = useState(false);
+  const [error, setError] = useState("");
 
   async function handleResend() {
     if (!email || resending) return;
     setResending(true);
+    setError("");
 
     const res = await fetch("/api/auth/resend-verification", {
       method: "POST",
@@ -64,7 +66,16 @@ function ExpiredState({ email }: { email: string | null }) {
     });
 
     setResending(false);
-    if (res.ok) setResent(true);
+
+    if (res.ok) {
+      setResent(true);
+      return;
+    }
+
+    if (res.status === 429) {
+      const data = await res.json();
+      setError(data.error);
+    }
   }
 
   return (
@@ -79,6 +90,11 @@ function ExpiredState({ email }: { email: string | null }) {
             This verification link has expired. Request a new one below.
           </p>
         </div>
+        {error && (
+          <div className="rounded-lg bg-destructive/10 px-3 py-2 text-sm text-destructive">
+            {error}
+          </div>
+        )}
         {resent ? (
           <p className="text-sm text-muted-foreground">
             New verification email sent. Check your inbox.
