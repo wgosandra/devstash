@@ -259,7 +259,10 @@ function ItemCard({ item }: { item: DashboardItem }) {
   const tags = item.tags.map((t) => t.tag.name);
 
   return (
-    <div className="flex cursor-pointer flex-col gap-3 rounded-xl border border-border bg-[#111114] p-3.5 transition-colors hover:border-[#2e2e34] hover:bg-[#131317]">
+    <div
+      className="flex cursor-pointer flex-col gap-3 rounded-xl border border-border bg-[#111114] p-3.5 transition-colors hover:border-[#2e2e34] hover:bg-[#131317]"
+      style={{ borderLeftColor: color + "70", borderLeftWidth: 3 }}
+    >
       {/* Header: type icon + type name + language + pin/fav */}
       <div className="flex items-center gap-2">
         {Icon && (
