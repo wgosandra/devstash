@@ -32,6 +32,26 @@ export async function getItemStats(userId: string) {
   return { totalItems, favoriteItems };
 }
 
+export async function getItemsByType(userId: string, typeSlug: string) {
+  return prisma.item.findMany({
+    where: {
+      userId,
+      type: { slug: typeSlug },
+    },
+    orderBy: { updatedAt: "desc" },
+    include: {
+      type: true,
+      tags: { include: { tag: true } },
+    },
+  });
+}
+
+export async function getItemTypeBySlug(slug: string) {
+  return prisma.itemType.findFirst({
+    where: { slug },
+  });
+}
+
 export async function getItemTypesWithCounts(userId: string) {
   const types = await prisma.itemType.findMany({
     where: {
