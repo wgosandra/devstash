@@ -89,6 +89,14 @@ Example v4 configuration:
 - Return `{ success, data, error }` pattern from actions
 - Display user-friendly error messages via toast
 
+## Testing
+
+- **Vitest** for unit tests (server actions and utilities only, not components)
+- Test files live next to the source: `src/lib/zod.test.ts`, `src/actions/sign-in.test.ts`
+- Use `.test.ts` extension (not `.test.tsx` — no component tests)
+- Mock external dependencies (Prisma, Resend, etc.) with `vi.mock()`
+- Run `npm run test` before committing
+
 ## Code Quality
 
 - No commented-out code unless specified

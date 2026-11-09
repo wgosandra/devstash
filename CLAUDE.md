@@ -16,7 +16,9 @@ Read the following to get the full context of the project:
 - `npm run dev` — start dev server (http://localhost:3000)
 - `npm run build` — production build
 - `npm run lint` — run ESLint (flat config, `eslint.config.mjs`)
-- No test framework is configured yet
+- `npm run test` — run unit tests (Vitest)
+- `npm run test:watch` — run tests in watch mode
+- `npm run test:coverage` — run tests with coverage report
 
 ## Stack
 
