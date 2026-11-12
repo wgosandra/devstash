@@ -63,6 +63,44 @@ export async function getItemTypeBySlug(slug: string) {
   });
 }
 
+export async function updateItem(
+  id: string,
+  userId: string,
+  data: {
+    title: string;
+    description?: string | null;
+    content?: string | null;
+    url?: string | null;
+    language?: string | null;
+    tags: string[];
+  }
+) {
+  const { tags, ...fields } = data;
+
+  return prisma.item.update({
+    where: { id, userId },
+    data: {
+      ...fields,
+      tags: {
+        deleteMany: {},
+        create: tags.map((name) => ({
+          tag: {
+            connectOrCreate: {
+              where: { userId_name: { userId, name } },
+              create: { name, userId },
+            },
+          },
+        })),
+      },
+    },
+    include: {
+      type: true,
+      tags: { include: { tag: true } },
+      collections: { include: { collection: true } },
+    },
+  });
+}
+
 export async function getItemTypesWithCounts(userId: string) {
   const types = await prisma.itemType.findMany({
     where: {
