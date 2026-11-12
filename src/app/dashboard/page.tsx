@@ -8,7 +8,8 @@ import {
   Clock,
 } from "lucide-react";
 import { iconMap } from "@/components/dashboard/icon-map";
-import { ItemCard } from "@/components/items/item-card";
+import { ClickableItemCard } from "@/components/items/clickable-item-card";
+import { ItemsClientWrapper } from "@/components/items/items-client-wrapper";
 import {
   getRecentCollections,
   getTotalCollectionCount,
@@ -169,41 +170,45 @@ export default async function DashboardPage() {
         </div>
       </section>
 
-      {/* Pinned Items — only show if there are pinned items */}
-      {pinnedItems.length > 0 && (
+      <ItemsClientWrapper>
+        {/* Pinned Items — only show if there are pinned items */}
+        {pinnedItems.length > 0 && (
+          <section className="flex flex-col gap-3.5">
+            <div className="flex items-center gap-2 text-muted-foreground">
+              <Pin className="size-3.5" />
+              <h2 className="text-[13px] font-semibold text-foreground">
+                Pinned
+              </h2>
+              <span className="font-mono text-xs text-[#5c5c66]">
+                {pinnedItems.length}
+              </span>
+            </div>
+            <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 xl:grid-cols-3">
+              {pinnedItems.map((item) => (
+                <ClickableItemCard key={item.id} item={item} />
+              ))}
+            </div>
+          </section>
+        )}
+
+        {/* Recent Items */}
         <section className="flex flex-col gap-3.5">
           <div className="flex items-center gap-2 text-muted-foreground">
-            <Pin className="size-3.5" />
+            <Clock className="size-3.5" />
             <h2 className="text-[13px] font-semibold text-foreground">
-              Pinned
+              Recent
             </h2>
             <span className="font-mono text-xs text-[#5c5c66]">
-              {pinnedItems.length}
+              {recentItems.length}
             </span>
           </div>
           <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 xl:grid-cols-3">
-            {pinnedItems.map((item) => (
-              <ItemCard key={item.id} item={item} />
+            {recentItems.map((item) => (
+              <ClickableItemCard key={item.id} item={item} />
             ))}
           </div>
         </section>
-      )}
-
-      {/* Recent Items */}
-      <section className="flex flex-col gap-3.5">
-        <div className="flex items-center gap-2 text-muted-foreground">
-          <Clock className="size-3.5" />
-          <h2 className="text-[13px] font-semibold text-foreground">Recent</h2>
-          <span className="font-mono text-xs text-[#5c5c66]">
-            {recentItems.length}
-          </span>
-        </div>
-        <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 xl:grid-cols-3">
-          {recentItems.map((item) => (
-            <ItemCard key={item.id} item={item} />
-          ))}
-        </div>
-      </section>
+      </ItemsClientWrapper>
     </div>
   );
 }

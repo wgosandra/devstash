@@ -6,11 +6,11 @@ Not Started
 
 ## Goals
 
-<!-- Add goals here -->
+<!-- Goals will be populated by /feature load -->
 
 ## Notes
 
-<!-- Add notes here -->
+<!-- Additional context and constraints -->
 
 ## History
 
@@ -34,3 +34,4 @@ Not Started
 - **2026-10-21** — Rate Limiting for Auth: Upstash Redis rate limiting on login (5/15min), register (3/1hr), forgot-password (3/1hr), reset-password (5/15min), resend-verification (3/15min), sliding window algorithm, fail-open design, 429 responses with Retry-After headers, frontend error display
 - **2026-10-24** — Items List View: dynamic `/items/[type]` route, extracted shared ItemCard component, type-filtered Prisma queries, responsive 2-column grid, type-colored left borders, empty state, 404 for invalid slugs
 - **2026-11-09** — Vitest setup, testing standards docs, items grid 3-column layout on large screens
+- **2026-11-12** — Item Drawer: right-side slide-in Sheet for item detail view, API route `/api/items/[id]` with auth, `getItemById` query, client wrapper with React context for drawer state, ClickableItemCard, action bar (Favorite/Pin/Copy/Edit/Delete), loading skeleton, works on dashboard and items list pages, TooltipProvider in root layout, shadcn Sheet/Skeleton/Tooltip components

@@ -46,7 +46,13 @@ function timeAgo(date: Date): string {
   return date.toLocaleDateString("en-US", { month: "short", day: "numeric" });
 }
 
-export function ItemCard({ item }: { item: ItemCardData }) {
+export function ItemCard({
+  item,
+  onClick,
+}: {
+  item: ItemCardData;
+  onClick?: () => void;
+}) {
   const Icon = iconMap[item.type.icon ?? "File"];
   const color = item.type.color ?? "#6b7280";
   const tags = item.tags.map((t) => t.tag.name);
@@ -55,6 +61,15 @@ export function ItemCard({ item }: { item: ItemCardData }) {
     <div
       className="flex cursor-pointer flex-col gap-3 rounded-xl border border-border bg-[#111114] p-3.5 transition-colors hover:border-[#2e2e34] hover:bg-[#131317]"
       style={{ borderLeftColor: color + "70", borderLeftWidth: 3 }}
+      onClick={onClick}
+      role="button"
+      tabIndex={0}
+      onKeyDown={(e) => {
+        if (e.key === "Enter" || e.key === " ") {
+          e.preventDefault();
+          onClick?.();
+        }
+      }}
     >
       {/* Header: type icon + type name + language + pin/fav */}
       <div className="flex items-center gap-2">
