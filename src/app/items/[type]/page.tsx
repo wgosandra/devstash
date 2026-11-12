@@ -2,7 +2,8 @@ import { notFound } from "next/navigation";
 import { auth } from "@/auth";
 import { redirect } from "next/navigation";
 import { getItemsByType, getItemTypeBySlug } from "@/lib/db/items";
-import { ItemCard } from "@/components/items/item-card";
+import { ClickableItemCard } from "@/components/items/clickable-item-card";
+import { ItemsClientWrapper } from "@/components/items/items-client-wrapper";
 import { iconMap } from "@/components/dashboard/icon-map";
 
 export default async function ItemsListPage({
@@ -47,11 +48,13 @@ export default async function ItemsListPage({
 
       {/* Items grid */}
       {items.length > 0 ? (
-        <div className="grid grid-cols-1 gap-3 md:grid-cols-2 lg:grid-cols-3">
-          {items.map((item) => (
-            <ItemCard key={item.id} item={item} />
-          ))}
-        </div>
+        <ItemsClientWrapper>
+          <div className="grid grid-cols-1 gap-3 md:grid-cols-2 lg:grid-cols-3">
+            {items.map((item) => (
+              <ClickableItemCard key={item.id} item={item} />
+            ))}
+          </div>
+        </ItemsClientWrapper>
       ) : (
         <div className="flex flex-col items-center justify-center rounded-xl border border-dashed border-border py-16 text-center">
           {Icon && (

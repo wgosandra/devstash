@@ -1,5 +1,16 @@
 import { prisma } from "@/lib/db";
 
+export async function getItemById(id: string, userId: string) {
+  return prisma.item.findFirst({
+    where: { id, userId },
+    include: {
+      type: true,
+      tags: { include: { tag: true } },
+      collections: { include: { collection: true } },
+    },
+  });
+}
+
 export async function getPinnedItems(userId: string) {
   return prisma.item.findMany({
     where: { userId, isPinned: true },
